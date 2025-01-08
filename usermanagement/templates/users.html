@@ -1,0 +1,265 @@
+{% extends 'adminlte/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+<!-- Estilos específicos del Dashboard -->
+<link rel="stylesheet" href="{% static 'adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/daterangepicker/daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/summernote/summernote-bs4.css' %}">
+<style>
+    img.table-avatar,
+        .table-avatar img {
+        border-radius: 50%;
+        display: inline;
+        width: 2.5rem;
+        }
+    
+        
+        .project-state {
+        text-align: center;
+        }
+</style>
+{% endblock %}
+
+{% block navbar %}
+<nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Navbar content -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+        </li>
+        <ul class="list-inline">
+            <li class="list-inline-item">
+                <img alt="Avatar" class="table-avatar" src="{% static 'adminlte/dist/img/avatar.png' %}">
+            </li>
+           <li class="list-inline-item">
+                <img alt="Avatar" class="table-avatar" src="{% static 'adminlte/dist/img/avatar2.png' %}">
+            </li>
+            <li class="list-inline-item">
+                <img alt="Avatar" class="table-avatar" src="{% static 'adminlte/dist/img/avatar3.png' %}">
+            </li>
+            <li class="list-inline-item">
+                <img alt="Avatar" class="table-avatar" src="{% static 'adminlte/dist/img/avatar04.png' %}">
+            </li>
+        </ul>
+    </ul>
+</nav>
+{% endblock %}
+
+{% block sidebar %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link">
+        <span class="brand-text font-weight-light">AdminLTE</span>
+    </a>
+    <div class="sidebar">
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        <p>Usuarios</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-sm-6">
+            <h4>Usuarios</h4>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-12">
+          <!-- /.card -->
+
+          <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Información de los usuarios registrados</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
+                    <i class="fas fa-minus"></i></button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
+                    <i class="fas fa-times"></i></button>
+
+                    <button type="button" class="btn btn-tool" onclick="handleCreateUser()" title="Crear nuevo usuario">
+                        Crear nuevo usuario
+                    </button>
+                </div>
+              </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Image</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Last Login</th>
+                    <th>Date Joined</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+    <!--MODAL USUARIO-->
+    <div class="modal fade" id="modalUsers" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white">Crear Nuevo Usuario</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="card card-info m-0">
+                        <!-- /.card-header -->
+                        <!-- Form start -->
+                        <form id="createUserForm" class="form-horizontal" enctype="multipart/form-data" action="{% url 'create_user' %}">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <!-- Campo de Username -->
+                                <div class="form-group row">
+                                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                                        <input type="hidden" class="form-control userid" id="userid"   name="userid" placeholder="userid">
+                                    </div>
+                                </div>
+                        
+                                <!-- Campo de Email -->
+                                <div class="form-group row">
+                                    <label for="email" class="col-sm-2 col-form-label">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                                    </div>
+                                </div>
+                        
+                                <!-- Campo de First Name -->
+                                <div class="form-group row">
+                                    <label for="first_name" class="col-sm-2 col-form-label">First Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name">
+                                    </div>
+                                </div>
+                        
+                                <!-- Campo de Last Name -->
+                                <div class="form-group row">
+                                    <label for="last_name" class="col-sm-2 col-form-label">Last Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name">
+                                    </div>
+                                </div>
+                        
+                                <!-- Campo de Password -->
+                                <div class="form-group row">
+                                    <label for="password" class="col-sm-2 col-form-label">Password</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                    </div>
+                                </div>
+                        
+                                <!-- Campo de Profile Image -->
+                                <div class="form-group row">
+                                    <label for="profile_image" class="col-sm-2 col-form-label">Profile Image</label>
+                                    <div class="col-sm-10">
+                                        <input type="file" class="form-control" id="profile_image" name="profile_image" accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- Botones de acción -->
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-info" id="submitForm">Create User</button>
+                                <button type="button" class="btn btn-info" id="submitEditButton" style="display: none;">Editar User</button>
+                                <button type="button" class="btn btn-default float-right" data-dismiss="modal" onclick="resetForm()">Cancel</button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL USUARIO-->
+
+    <!-- MODAL DELETE -->
+    <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este usuario?</p>
+                    <input type="hidden" id="deleteUserId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteUser()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- END MODAL DELETE-->
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Scripts específicos del Dashboard -->
+<script src="{% static 'adminlte/plugins/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'adminlte/plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'adminlte/plugins/daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'adminlte/dist/js/pages/dashboard.js' %}"></script>
+
+<!-- DataTables -->
+<script src="{% static 'adminlte/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+
+<script src="{% static 'js/usermanagement/usermanagement.js' %}"></script>
+
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+            }
+        });
+    });
+  </script>
+{% endblock %}

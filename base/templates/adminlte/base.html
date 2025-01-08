@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AdminLTE{% endblock %}</title>
+    <!-- Global CSS -->
+    <link rel="stylesheet" href="{% static 'adminlte/plugins/fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'adminlte/dist/css/adminlte.min.css' %}">
+    {% block head %}
+    <!-- Additional CSS -->
+    {% endblock %}
+</head>
+<body class="{% block body_class %}hold-transition sidebar-mini layout-fixed{% endblock %}">
+    <div class="wrapper">
+        {% block navbar %}{% endblock %}
+        {% block sidebar %}{% endblock %}
+
+
+        {% block content %}{% endblock %}
+     
+        
+        {% block footer %}{% endblock %}
+    </div>
+    <!-- Global JS -->
+    <script src="{% static 'adminlte/plugins/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'adminlte/dist/js/adminlte.min.js' %}"></script>
+    {% block scripts %}
+    <!-- Additional JS -->
+    {% endblock %}
+</body>
+</html>
