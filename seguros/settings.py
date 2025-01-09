@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'base',
     'login',
-    'usermanagement'
+    'usermanagement',
+    'labelcolors',
 ]
 
 MIDDLEWARE = [

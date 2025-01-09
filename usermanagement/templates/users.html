@@ -49,25 +49,7 @@
 </nav>
 {% endblock %}
 
-{% block sidebar %}
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="#" class="brand-link">
-        <span class="brand-text font-weight-light">AdminLTE</span>
-    </a>
-    <div class="sidebar">
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
-                <li class="nav-item">
-                    <a href="#" class="nav-link active">
-                        <i class="fa fa-users" aria-hidden="true"></i>
-                        <p>Usuarios</p>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</aside>
-{% endblock %}
+
 
 {% block content %}
 <div class="content-wrapper">
@@ -147,7 +129,7 @@
                     <div class="card card-info m-0">
                         <!-- /.card-header -->
                         <!-- Form start -->
-                        <form id="createUserForm" class="form-horizontal" enctype="multipart/form-data" action="{% url 'create_user' %}">
+                        <form id="createUserForm" class="form-horizontal" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="card-body">
                                 <!-- Campo de Username -->
