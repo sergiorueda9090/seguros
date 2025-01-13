@@ -169,8 +169,9 @@ const API_USERS_URL = "http://127.0.0.1:8000/users/api/users/";
 async function listUsers() {
     try {
         const accessToken = localStorage.getItem("access");
+
         if (!accessToken) {
-            alert("No tienes un token de acceso. Por favor, inicia sesión.");
+            window.location.href = '/';
             return;
         }
 

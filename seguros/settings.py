@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework',
     'base',
+    'dashboard',
     'login',
     'usermanagement',
     'labelcolors',
+    'roles',
+    'teammovilidad'
 ]
 
 MIDDLEWARE = [

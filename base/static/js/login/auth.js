@@ -39,7 +39,7 @@ async function login(username, password) {
         const data = await response.json();
         localStorage.setItem("access", data.access); // Guardar token de acceso
         localStorage.setItem("refresh", data.refresh); // Guardar token de refresco
-        alert("Inicio de sesión exitoso.");
+        window.location.href = '/dashboard/';
         return data;
     } catch (error) {
         console.error("Error en la solicitud:", error);

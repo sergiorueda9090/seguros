@@ -1,0 +1,323 @@
+{% extends 'adminlte/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+<!-- Estilos específicos del Dashboard -->
+<link rel="stylesheet" href="{% static 'adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/daterangepicker/daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/summernote/summernote-bs4.css' %}">
+<style>
+    img.table-avatar,
+        .table-avatar img {
+        border-radius: 50%;
+        display: inline;
+        width: 2.5rem;
+        }
+    
+        
+        .project-state {
+        text-align: center;
+        }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>Team Movilidad</h4>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <!-- /.card -->
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Información de Team Movilidad</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" onclick="openCreateModal()" title="Crear nuevo Team Movilidad">
+                                Crear nuevo Team Movilidad
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="teamMovilidadTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Usuarios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Usuario 1 -->
+                                <tr>
+                                    <td style="background-color: #D4E6F1; font-weight: bold;">
+                                        
+                                        BRENDA
+                                        <button type="button" class="btn btn-tool" onclick="openCreateRegistroModal()" title="Crear nuevo registros">
+                                            Crear nuevo registros
+                                        </button>
+                                    </td>
+                                   
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Hora Ingreso</th>
+                                                    <th>Hora Fin</th>
+                                                    <th>Etiqueta 1</th>
+                                                    <th>Etiqueta 2</th>
+                                                    <th>Placa</th>
+                                                    <th>Cilindraje</th>
+                                                    <th>Modelo</th>
+                                                    <th>Chasis</th>
+                                                    <th>Cedula</th>
+                                                    <th>Nombre Completo</th>
+                                                    <th>Telefono</th>
+                                                    <th>Correo</th>
+                                                    <th>Direccion</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>08:30 AM</td>
+                                                    <td> ---- </td>
+                                                    <td>Etiqueta A</td>
+                                                    <td>Etiqueta B</td>
+                                                    <td>ZOE37D</td>
+                                                    <td>149</td>
+                                                    <td>2016</td>
+                                                    <td>780878065</td>
+                                                    <td>1045229731</td>
+                                                    <td>Yeimer Díaz</td>
+                                                    <td>3104528981</td>
+                                                    <td>correo1@gmail.com</td>
+                                                    <td>Calle 123 #45-67</td>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="btn btn-success btn-sm" onclick="editUser(${user.id})" title="Editar Usuario">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editUser(${user.id})" title="Editar Usuario">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="confirmDelete(${user.id})" title="Eliminar Usuario">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>08:30 AM</td>
+                                                    <td> ---- </td>
+                                                    <td>Etiqueta A</td>
+                                                    <td>Etiqueta B</td>
+                                                    <td>ZOE37D</td>
+                                                    <td>149</td>
+                                                    <td>2016</td>
+                                                    <td>780878065</td>
+                                                    <td>1045229731</td>
+                                                    <td>Yeimer Díaz</td>
+                                                    <td>3104528981</td>
+                                                    <td>correo1@gmail.com</td>
+                                                    <td>Calle 123 #45-67</td>
+                                                    <td>
+                                                        <a href="javascript:void(0);" class="btn btn-success btn-sm" onclick="editUser(${user.id})" title="Editar Usuario">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="btn btn-info btn-sm" onclick="editUser(${user.id})" title="Editar Usuario">
+                                                            <i class="fas fa-pencil-alt"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" class="btn btn-danger btn-sm" onclick="confirmDelete(${user.id})" title="Eliminar Usuario">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                                <!-- Agrega otros registros -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+    <!-- NUEVO MODAL -->
+    <div class="modal fade" id="openCreateRegistroClienteModal" tabindex="-1" aria-labelledby="nuevoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="modal-title text-white" id="nuevoModalLabel">🌟 Crear Registro</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="createRegistroForm">
+                        {% csrf_token %}
+                        <div class="container">
+                            <div class="row">
+                                <!-- Primera columna -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="cliente">👤 ¿A qué cliente pertenece?</label>
+                                        <select id="cliente" name="cliente" class="form-control" required>
+                                            <option value="" selected disabled>Seleccione un cliente</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="total">💵 Total</label>
+                                        <input type="number" class="form-control" id="total" name="total" placeholder="Total" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="precioLey">⚖️ Precio de ley</label>
+                                        <input type="number" class="form-control" id="precioLey" name="precioLey" placeholder="Precio de ley" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="comision">💰 Comisión</label>
+                                        <input type="number" class="form-control" id="comision" name="comision" placeholder="Comisión" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="etiqueta1">🏷️ Etiqueta 1</label>
+                                        <input type="text" class="form-control" id="etiqueta1" name="etiqueta1" placeholder="Etiqueta 1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="etiqueta2">🏷️ Etiqueta 2</label>
+                                        <input type="text" class="form-control" id="etiqueta2" name="etiqueta2" placeholder="Etiqueta 2">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="placa">🚗 Placa (Clave Única)</label>
+                                        <input type="text" class="form-control text-uppercase" id="placa" name="placa" placeholder="Placa" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cilindraje">🔧 Cilindraje</label>
+                                        <input type="number" class="form-control" id="cilindraje" name="cilindraje" placeholder="Cilindraje">
+                                    </div>
+                                </div>
+    
+                                <!-- Segunda columna -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="modelo">📅 Modelo</label>
+                                        <input type="number" class="form-control" id="modelo" name="modelo" placeholder="Modelo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chasis">🔩 Chasis (Máximo 17 caracteres)</label>
+                                        <input type="text" class="form-control text-uppercase" id="chasis" name="chasis" maxlength="17" placeholder="Chasis" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cedula">🆔 Cédula</label>
+                                        <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nombreCompleto">👤 Nombre completo</label>
+                                        <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" placeholder="Nombre completo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="telefono">📞 Teléfono</label>
+                                        <input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Teléfono">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="correo">📧 Correo</label>
+                                        <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="direccion">🏠 Dirección</label>
+                                        <textarea class="form-control" id="direccion" name="direccion" placeholder="Dirección"rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="tiempoTramite">⏳ Tiempo del trámite</label>
+                                        <input type="text" class="form-control" id="tiempoTramite" name="tiempoTramite" placeholder="Tiempo del trámite">
+                                    </div>
+                                </div>
+    
+                                <!-- Tercera columna (ancho completo) -->
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="cuentaBancaria">🏦 ¿Con qué cuenta bancaria se pagó?</label>
+                                        <input type="text" class="form-control" id="cuentaBancaria" name="cuentaBancaria" placeholder="Cuenta bancaria">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- Botones de acción -->
+                        <div class="text-right mt-3">
+                            <button type="submit" class="btn btn-success">✅ Guardar</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">❌ Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <!-- MODAL DELETE -->
+    <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirmar Eliminación</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este color?</p>
+                    <input type="hidden" id="deleteLabelColorId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteLabelColor()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+    <!-- END MODAL DELETE -->
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<!-- Scripts específicos del Dashboard -->
+<script src="{% static 'adminlte/plugins/chart.js/Chart.min.js' %}"></script>
+<script src="{% static 'adminlte/plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'adminlte/plugins/daterangepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'adminlte/dist/js/pages/dashboard.js' %}"></script>
+
+<!-- DataTables -->
+<script src="{% static 'adminlte/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+
+<script src="{% static 'js/teammovilidad/teammovilidad.js' %}"></script>
+
+
+
+{% endblock %}

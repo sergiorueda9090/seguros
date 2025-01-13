@@ -2,10 +2,10 @@ const API_BASE_URL = "http://127.0.0.1:8000/lable/api/labelcolor/";
 
 async function fetchLabelColors() {
 
-    const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM2NDY2NzM2LCJpYXQiOjE3MzYzODAzMzYsImp0aSI6ImY4OTYxYTYxMjY5MzRjNzdhNWQxMTk0YTFhODhhYmFlIiwidXNlcl9pZCI6Mjd9.NP8WDYZOKqeXLKRHhIMu_6Mt4RUHK95vQB_6MAJitWo";
+    const accessToken =  localStorage.getItem("access");
  
     if (!accessToken) {
-        alert("No tienes un token de acceso. Por favor, inicia sesión.");
+        window.location.href = '/';
         return;
     }
 

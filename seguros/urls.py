@@ -21,10 +21,13 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/',  admin.site.urls),
-    path('',        include('login.urls')),
-    path('base',    include('base.urls')),
-    path('users/',  include('usermanagement.urls')),
-    path('lable/',  include('labelcolors.urls'))
+    path('',           include('login.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('base',       include('base.urls')),
+    path('users/',     include('usermanagement.urls')),
+    path('lable/',     include('labelcolors.urls')),
+    path('roles/',     include('roles.urls')),
+    path('teammovilidad/', include('teammovilidad.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
