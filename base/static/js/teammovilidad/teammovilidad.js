@@ -1,7 +1,4 @@
 
-
-const API_BASE_URL = "https://seguros.sergiodevsolutions.com";
-//const API_BASE_URL = "http://127.0.0.1:8000";
 async function cargarRegistrosAgrupados() {
     const API_URL = `${API_BASE_URL}/teammovilidad/api/registro-movilidad-agrupado`; // URL del endpoint
     const token = localStorage.getItem("access"); // Obtener el token JWT del almacenamiento local

@@ -159,8 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     submitEditButton.addEventListener('click', handleFormEditSubmission);
 });
 
-//const API_USERS_URL = "http://127.0.0.1:8000";
-const API_USERS_URL = "https://seguros.sergiodevsolutions.com";
+
 function handleCreateUser() {
     resetForm(); // Restablecer el formulario
     $("#modalUsers").modal("show"); // Abrir el modal
@@ -175,7 +174,7 @@ async function listUsers() {
             return;
         }
 
-        const response = await fetch(`${API_USERS_URL}/users/api/users/`, {
+        const response = await fetch(`${API_BASE_URL}/users/api/users/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -262,7 +261,7 @@ async function editUser(userId) {
 
     try {
         // Realizar la solicitud al endpoint
-        const response = await fetch(`${API_USERS_URL}/users/api/users/${userId}/`, {
+        const response = await fetch(`${API_BASE_URL}/users/api/users/${userId}/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -340,7 +339,7 @@ async function deleteUser() {
     }
 
     try {
-        const response = await fetch(`${API_USERS_URL}/users/api/users/${userId}/delete/`, {
+        const response = await fetch(`${API_BASE_URL}/users/api/users/${userId}/delete/`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
