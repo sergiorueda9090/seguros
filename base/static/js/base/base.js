@@ -2,26 +2,27 @@
 
 async function logout() {
 
-    const refreshToken = localStorage.getItem("access");
 
-    if (refreshToken) {
-        try {
-            await fetch(`${BASE_URL}/api/login/logout`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ refresh: refreshToken }),
-            });
-        } catch (error) {
-            console.error("Error al revocar el token:", error);
+    fetch(`${API_BASE_URL}/api/login/logout/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    .then((response) => {
+        if (response.ok) {
+            // Elimina los tokens del almacenamiento local
+            localStorage.removeItem("access");
+            localStorage.removeItem("refresh");
+            alert("Cierre de sesión exitoso.");
+            // Redirige al login del admin o donde prefieras
+            window.location.href = "/";
+        } else {
+            alert("Error al cerrar sesión.");
         }
-    }
-
-    // Eliminar los tokens del localStorage
-    localStorage.removeItem("access");
-    localStorage.removeItem("refresh");
-
-    // Redirigir al inicio de sesión
-    window.location.href = "/";
+    })
+    .catch((error) => {
+        console.error("Error:", error);
+        alert("Error de red. Inténtalo de nuevo.");
+    });
 }
