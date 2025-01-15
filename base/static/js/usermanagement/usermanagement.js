@@ -159,12 +159,12 @@ document.addEventListener('DOMContentLoaded', function () {
     submitEditButton.addEventListener('click', handleFormEditSubmission);
 });
 
+const API_USERS_URL = "http://127.0.0.1:8000";
+
 function handleCreateUser() {
     resetForm(); // Restablecer el formulario
     $("#modalUsers").modal("show"); // Abrir el modal
 }
-
-const API_USERS_URL = "http://127.0.0.1:8000/users/api/users/";
 
 async function listUsers() {
     try {
@@ -175,7 +175,7 @@ async function listUsers() {
             return;
         }
 
-        const response = await fetch(API_USERS_URL, {
+        const response = await fetch(`${API_USERS_URL}/users/api/users/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -262,7 +262,7 @@ async function editUser(userId) {
 
     try {
         // Realizar la solicitud al endpoint
-        const response = await fetch(`http://127.0.0.1:8000/users/api/users/${userId}/`, {
+        const response = await fetch(`${API_USERS_URL}/users/api/users/${userId}/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -340,7 +340,7 @@ async function deleteUser() {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/users/api/users/${userId}/delete/`, {
+        const response = await fetch(`${API_USERS_URL}/users/api/users/${userId}/delete/`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,

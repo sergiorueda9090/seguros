@@ -1,5 +1,5 @@
-const API_BASE_URL = "http://127.0.0.1:8000/api/login"; // Base URL de la API
-
+const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL de la API
+//const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL PRODUCCION
 // Función para manejar el inicio de sesión
 async function handleLogin() {
     const username = document.getElementById("username").value.trim();
@@ -22,7 +22,7 @@ async function handleLogin() {
 // Iniciar sesión y obtener tokens
 async function login(username, password) {
     try {
-        const response = await fetch(`${API_BASE_URL}/token/`, {
+        const response = await fetch(`${API_BASE_URL}/api/login/token/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -57,7 +57,7 @@ async function accessProtectedResource() {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/protected/`, {
+        const response = await fetch(`${API_BASE_URL}/api/login/protected/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,

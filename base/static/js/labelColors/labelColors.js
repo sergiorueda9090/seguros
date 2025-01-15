@@ -1,4 +1,6 @@
-const API_BASE_URL = "http://127.0.0.1:8000/lable/api/labelcolor/";
+const API_BASE_URL = "http://127.0.0.1:8000";
+//const API_BASE_URL = "http://127.0.0.1:8000"; //produccion
+
 
 async function fetchLabelColors() {
 
@@ -11,7 +13,7 @@ async function fetchLabelColors() {
 
     try {
 
-        const response = await fetch(API_BASE_URL, {
+        const response = await fetch(`${API_BASE_URL}/lable/api/labelcolor/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -62,7 +64,7 @@ async function openEditModal(id) {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}${id}/`, {
+        const response = await fetch(`${API_BASE_URL}/lable/api/labelcolor/${id}/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,
@@ -116,7 +118,7 @@ async function saveLabelColor() {
 
         if (id) {
             // Actualizar
-            response = await fetch(`${API_BASE_URL}${id}/`, {
+            response = await fetch(`${API_BASE_URL}/lable/api/labelcolor/${id}/`, {
                 method: "PUT",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -168,7 +170,7 @@ async function deleteLabelColor() {
     const id = document.getElementById("deleteLabelColorId").value; // Obtener el ID del campo oculto
 
     try {
-        const response = await fetch(`${API_BASE_URL}${id}/`, {
+        const response = await fetch(`${API_BASE_URL}/lable/api/labelcolor/${id}/`, {
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${accessToken}`,

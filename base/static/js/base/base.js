@@ -1,11 +1,14 @@
 
+const BASE_URL = "http://127.0.0.1:8000";
+//const BASE_URL = "http://127.0.0.1:8000"; //produccion
+
 async function logout() {
 
     const refreshToken = localStorage.getItem("access");
 
     if (refreshToken) {
         try {
-            await fetch("http://127.0.0.1:8000/api/login/logout", {
+            await fetch(`${BASE_URL}/api/login/logout`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

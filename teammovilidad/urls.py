@@ -4,5 +4,6 @@ from .views import team_movilidad
 app_name = 'teammovilidad'
 
 urlpatterns = [
-    path("",team_movilidad, name="team_movilidad")
+    path("",team_movilidad, name="team_movilidad"),
+    path('api/', include('teammovilidad.api.urls')),
 ]

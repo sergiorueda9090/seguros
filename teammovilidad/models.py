@@ -6,9 +6,9 @@ class CrearRegistroMovilidad(models.Model):
     idusuario = models.ForeignKey(User, on_delete=models.CASCADE, related_name='registros_movilidad')
     id_color = models.ForeignKey(LabelColor, on_delete=models.SET_NULL, blank=True, null=True, related_name='registros_movilidad')  # Relación con LabelColor
     cliente = models.CharField(max_length=255)
-    total = models.DecimalField(max_digits=10, decimal_places=2)
-    precioLey = models.DecimalField(max_digits=10, decimal_places=2)
-    comision = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.CharField(max_length=255)
+    precioLey = models.CharField(max_length=255)
+    comision = models.CharField(max_length=255)
     etiqueta1 = models.CharField(max_length=255, blank=True, null=True)
     etiqueta2 = models.CharField(max_length=255, blank=True, null=True)
     placa = models.CharField(max_length=10, unique=True)  # Clave única

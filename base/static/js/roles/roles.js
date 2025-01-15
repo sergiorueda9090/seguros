@@ -1,9 +1,9 @@
-const API_BASE_URL = "http://127.0.0.1:8000/roles/api/roles/";
-
+const API_BASE_URL = "http://127.0.0.1:8000";
+//const API_BASE_URL = "http://127.0.0.1:8000"; PRODUCCION
 // Obtener y listar roles
 async function fetchRoles() {
     try {
-        const response = await fetch(API_BASE_URL);
+        const response = await fetch(`${API_BASE_URL}/roles/api/roles/`);
         const data = await response.json();
 
         const tableBody = document.querySelector("#rolesTable tbody");
@@ -38,7 +38,7 @@ function openCreateModal() {
 // Abrir modal para editar
 async function openEditModal(id) {
     try {
-        const response = await fetch(`${API_BASE_URL}${id}/`);
+        const response = await fetch(`${API_BASE_URL}/roles/api/roles/${id}/`);
         const role = await response.json();
 
         document.getElementById("roleId").value = role.id;
@@ -61,7 +61,7 @@ async function saveRole() {
 
     try {
         const response = id
-            ? await fetch(`${API_BASE_URL}${id}/`, {
+            ? await fetch(`${API_BASE_URL}/roles/api/roles/${id}/`, {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(payload),
@@ -94,7 +94,7 @@ function showDeleteModal(id) {
 async function deleteRole() {
     const roleId = document.getElementById("deleteRoleId").value; // Obtener el ID del campo oculto 
     try {
-        const response = await fetch(`${API_BASE_URL}${roleId}/`, {
+        const response = await fetch(`${API_BASE_URL}/roles/api/roles/${roleId}/`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
