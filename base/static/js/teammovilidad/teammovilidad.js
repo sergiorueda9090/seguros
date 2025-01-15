@@ -2,7 +2,7 @@
 async function cargarRegistrosAgrupados() {
     const API_URL = `${API_BASE_URL}/teammovilidad/api/registro-movilidad-agrupado`; // URL del endpoint
     const token = localStorage.getItem("access"); // Obtener el token JWT del almacenamiento local
-
+    console.log("TOKEN ",token)
     try {
         const response = await fetch(API_URL, {
             method: "GET",
