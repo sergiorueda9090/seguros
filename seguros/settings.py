@@ -94,13 +94,18 @@ SIMPLE_JWT = {
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
+"""
+ database.default.hostname = localhost
+ database.default.database = ecommercenew
+ database.default.username = example_user
+ database.default.password = password
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # Motor MySQL
         'NAME': 'seguros',  # Nombre de tu base de datos
-        'USER': 'root',                  # Usuario de la base de datos
-        'PASSWORD': 'root',           # Contraseña del usuario
+        'USER': 'example_user',                  # Usuario de la base de datos
+        'PASSWORD': 'password',           # Contraseña del usuario
         'HOST': 'localhost',                   # Servidor de la base de datos
         'PORT': '3306',                        # Puerto de MySQL (por defecto 3306)
     }
