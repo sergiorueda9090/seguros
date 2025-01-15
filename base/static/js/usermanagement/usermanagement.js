@@ -159,8 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
     submitEditButton.addEventListener('click', handleFormEditSubmission);
 });
 
-//const API_USERS_URL = "http://127.0.0.1:8000";
-const API_USERS_URL = "https://seguros.sergiodevsolutions.com";
+    const API_USERS_URL = "http://127.0.0.1:8000";
+//const API_USERS_URL = "https://seguros.sergiodevsolutions.com";
 function handleCreateUser() {
     resetForm(); // Restablecer el formulario
     $("#modalUsers").modal("show"); // Abrir el modal
