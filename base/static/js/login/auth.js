@@ -1,5 +1,5 @@
-const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL de la API
-//const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL PRODUCCION
+//const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL de la API
+const API_BASE_URL = "https://seguros.sergiodevsolutions.com"; // Base URL PRODUCCION
 // Función para manejar el inicio de sesión
 async function handleLogin() {
     const username = document.getElementById("username").value.trim();
