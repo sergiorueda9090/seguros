@@ -1,26 +1,45 @@
-const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL de la API
-//const API_BASE_URL = "https://seguros.sergiodevsolutions.com"; // Base URL PRODUCCION
+//const API_BASE_URL = "http://127.0.0.1:8000"; // Base URL de la API
+const API_BASE_URL = "https://seguros.sergiodevsolutions.com"; // Base URL PRODUCCION
 // Función para manejar el inicio de sesión
-async function handleLogin() {
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const errorMessages = document.getElementById("errorMessages");
 
-    // Limpiar mensajes de error
-    errorMessages.classList.add("d-none");
-    errorMessages.innerHTML = "";
+async function handleLogin() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
 
     if (!username || !password) {
-        errorMessages.classList.remove("d-none");
-        errorMessages.innerHTML = "<p>Por favor, completa todos los campos.</p>";
+        document.getElementById('errorMessage').textContent = 'Todos los campos son obligatorios.';
         return;
     }
 
-    await login(username, password);
+    try {
+        const response = await fetch('login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            document.getElementById('errorMessage').textContent = errorData.error || 'Error al iniciar sesión.';
+            return;
+        }
+
+        const data = await response.json();
+        
+        await loginToken(username, password);
+        
+    } catch (error) {
+        console.error('Error en la solicitud:', error);
+        document.getElementById('errorMessage').textContent = 'Hubo un error al procesar la solicitud.';
+    }
 }
 
-// Iniciar sesión y obtener tokens
-async function login(username, password) {
+
+async function loginToken(username, password) {
     try {
         const response = await fetch(`${API_BASE_URL}/api/login/token/`, {
             method: "POST",
@@ -39,8 +58,9 @@ async function login(username, password) {
         const data = await response.json();
         localStorage.setItem("access", data.access); // Guardar token de acceso
         localStorage.setItem("refresh", data.refresh); // Guardar token de refresco
+
         window.location.href = '/dashboard/';
-        return data;
+        
     } catch (error) {
         console.error("Error en la solicitud:", error);
         alert("Hubo un error al iniciar sesión.");
