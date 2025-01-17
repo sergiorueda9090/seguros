@@ -140,19 +140,54 @@ function openCreateRegistroModal(){
     $("#openCreateRegistroClienteModal").modal("show");
 }
 
-async function createRegistro() {
+document.getElementById("createRegistro").addEventListener("click", function () {
     const form = document.getElementById("createRegistroForm");
-    const formData = new FormData(form);
-    console.log("formData ",formData);
-    const payload = {};
-    formData.forEach((value, key) => {
-        payload[key] = value;
+    const inputs = form.querySelectorAll("input, select, textarea");
+
+    let isValid = true;
+
+    inputs.forEach((input) => {
+        const value = input.value.trim(); // Eliminar espacios al inicio y al final
+        const isRequired = input.hasAttribute("required");
+
+        // Validar si es requerido y está vacío
+        if (isRequired && value === "") {
+            isValid = false;
+            alert(`El campo "${input.name}" es obligatorio.`);
+        }
+
+        // Validar espacios en blanco al inicio o al final
+        if (value !== input.value) {
+            isValid = false;
+            alert(`El campo "${input.name}" no debe tener espacios al inicio o al final.`);
+        }
+
+        // Asignar el valor limpio al input (sin espacios al inicio o final)
+        input.value = value;
     });
-    console.log("payload ",payload);
+
+    if (!isValid) {
+        return; // Detener el envío si hay errores
+    }
+
+    // Crear el payload si la validación es exitosa
+    const formData = new FormData(form);
+    const payload = {};
+
+    formData.forEach((value, key) => {
+        payload[key] = value.trim(); // Asegurar que el valor no tenga espacios en blanco
+    });
+
+    console.log("Payload validado:", payload);
+
+    // Aquí puedes llamar a la función que realiza el envío
+    enviarFormulario(payload);
+});
+
+async function enviarFormulario(payload) {
     const token = localStorage.getItem("access"); // Obtener el token JWT del almacenamiento local
-    return;
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/registro-movilidad/", {
+        const response = await fetch(`${API_BASE_URL}/teammovilidad/api/registro-movilidad/`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`, // Enviar el token JWT
@@ -169,62 +204,256 @@ async function createRegistro() {
 
         alert("Registro creado exitosamente.");
         $("#openCreateRegistroClienteModal").modal("hide");
-        // Recargar la lista o actualizar la tabla
     } catch (error) {
         console.error("Error al crear el registro:", error);
     }
 }
 
+//LISTAR REGISTROS
+document.addEventListener("DOMContentLoaded", () => {
+    cargarRegistrosAgrupados();
+});
+
+// SHOW GESTIÓN DE TRÁMITES
+async function viewRegistro(idRegistro) {
+    if (!idRegistro) {
+        alert("ID de registro no proporcionado.");
+        return;
+    }
+
+    try {
+        // Mostrar confirmación opcional
+        console.log(`Cargando registro con ID: ${idRegistro}`);
+
+        // URL del endpoint
+        const url = `${API_BASE_URL}/teammovilidad/api/registro-movilidad-subregistros/${idRegistro}/`;
+
+        // Realizar la solicitud al backend
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("access")}`, // Token de autenticación
+            },
+        });
+
+        // Validar la respuesta del servidor
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Error al obtener el registro.");
+        }
+
+        // Procesar los datos del registro
+        const data = await response.json();
+        console.log("Datos del registro:", data);
+
+        // Validar la estructura de los datos
+        if (!data.registro_movilidad || !data.usuario || !Array.isArray(data.subregistros)) {
+            throw new Error("La respuesta del servidor tiene un formato inválido.");
+        }
+
+        // Mostrar datos del registro principal
+        
+        const usuario           = data.usuario;
+        const subregistros      = data.subregistros;
+
+        // Cargar los datos del registro en el formulario
+        const registro = data.registro_movilidad;
+        console.log("REGISTRO ",registro);
+        document.getElementById("clienteVer").value = registro.cliente || "";
+        document.getElementById("etiqueta1Ver").value = registro.etiqueta1 || "";
+        document.getElementById("etiqueta2Ver").value = registro.etiqueta2 || "";
+        document.getElementById("placaVer").value = registro.placa || "";
+        document.getElementById("cilindrajeVer").value = registro.cilindraje || "";
+        document.getElementById("modeloVer").value = registro.modelo || "";
+        document.getElementById("chasisVer").value = registro.chasis || "";
+        document.getElementById("tipoDocumentoVer").value = registro.tipoDocumento || "";
+        document.getElementById("numeroDocumentoVer").value = registro.numeroDocumento || "";
+        document.getElementById("nombreCompletoVer").value = registro.nombreCompleto || "";
+        document.getElementById("telefonoVer").value = registro.telefono || "";
+        document.getElementById("correoVer").value = registro.correo || "";
+        document.getElementById("direccionVer").value = registro.direccion || "";
+        document.getElementById("idTramite").value = registro.id || "";
+
+        // Mostrar subregistros (historial)
+        if (subregistros.length > 0) {
+
+            console.log("Historial de cambios:");
+
+            // Limpiar la tabla de subregistros
+            const tableBody = document.querySelector("#verTableTeamMovilidad tbody");
+            tableBody.innerHTML = "";
+
+            // Cargar subregistros en la tabla
+            const subregistros = data.subregistros;
+
+            subregistros.forEach((subregistro) => {
+                const row = `
+                    <tr>
+                        <td>${data.usuario.username}</td>
+                        <td>${subregistro.accion}</td>
+                        <td>${subregistro.campo_modificado}</td>
+                        <td>${subregistro.valor_antes}</td>
+                        <td>${subregistro.valor_despues}</td>
+                        <td>${new Date(registro.fecha_creacion).toLocaleString()}</td>
+                        <td>${new Date(registro.fecha_creacion).toLocaleString()}</td>
+                        <td>${registro.etiqueta1 || "N/A"}</td>
+                        <td>${registro.etiqueta2 || "N/A"}</td>
+                        <td>${registro.placa || "N/A"}</td>
+                        <td>${registro.cilindraje || "N/A"}</td>
+                        <td>${registro.modelo || "N/A"}</td>
+                        <td>${registro.chasis || "N/A"}</td>
+                        <td>${registro.cedula || "N/A"}</td>
+                        <td>${registro.nombreCompleto || "N/A"}</td>
+                        <td>${registro.telefono || "N/A"}</td>
+                        <td>${registro.correo || "N/A"}</td>
+                        <td>${registro.direccion || "N/A"}</td>
+                        <td>${subregistro.fecha_creacion || "N/A"}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+
+        } else {
+            console.log("No hay historial de cambios para este registro.");
+        }
+
+        // Aquí puedes cargar los datos en un modal, tabla o algún componente de la interfaz
+        // Ejemplo: openModalConDatos(data);
+
+    } catch (error) {
+        console.error("Error al cargar el registro:", error.message);
+        alert("Error al cargar el registro. Por favor, intenta de nuevo.");
+    }
+}
+
+//SELECT2
+
+
+// Asignar valor al select con Select2
+const setSelect2Value = (id, value) => {
+    const element = $(`#${id}`); // Usar jQuery para manipular Select2
+    if (element.length > 0) {
+        element.val(value).trigger('change'); // Asigna el valor y dispara el evento 'change'
+    } else {
+        console.error(`El elemento con ID "${id}" no existe.`);
+    }
+
+    // Mostrar u ocultar campos adicionales según el valor seleccionado
+    if (value === "LINK DE PAGO") {
+        $('#linkPagoFields').removeClass('d-none'); // Mostrar los campos adicionales
+    } else {
+        $('#linkPagoFields').addClass('d-none'); // Ocultar los campos adicionales
+    }
+};
+
+// Función para seleccionar el radio button según el valor enviado desde la base de datos
+function setRadioValue(name, value) {
+    // Seleccionar el radio button con el nombre y valor proporcionados
+    const radioButton = document.querySelector(`input[name="${name}"][value="${value}"]`);
+    if (radioButton) {
+        radioButton.checked = true; // Marcar como seleccionado
+    } else {
+        console.error(`No se encontró un radio button con el valor "${value}" para el nombre "${name}".`);
+    }
+}
+
+
+//EDITAR REGISTRO
 async function loadRegistroForEdit(id) {
     try {
-        const response = await fetch(`http://127.0.0.1:8000/teammovilidad/api/registro-movilidad/${id}/`);
+        const response = await fetch(`${API_BASE_URL}/teammovilidad/api/registro-movilidad/${id}/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("access")}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert(errorData.error || "Error al cargar el registro.");
+            return;
+        }
+
         const registro = await response.json();
-        console.log("registro ",registro)
+     
+
+        // Mostrar botones y etiquetas para edición
         $("#nuevoModalLabelModificar").show();
         $("#updateRegistro").show();
-
         $("#createRegistro").hide();
         $("#nuevoModalLabelCrear").hide();
-        // Llenar el formulario con los datos
-        document.getElementById("idTramite").value = registro.id;
-        document.getElementById("cliente").value = registro.cliente;
-        document.getElementById("total").value = registro.total;
-        document.getElementById("precioLey").value = registro.precioLey;
-        document.getElementById("comision").value = registro.comision;
-        document.getElementById("etiqueta1").value = registro.etiqueta1;
-        document.getElementById("etiqueta2").value = registro.etiqueta2;
-        document.getElementById("placa").value = registro.placa;
-        document.getElementById("cilindraje").value = registro.cilindraje;
-        document.getElementById("modelo").value = registro.modelo;
-        document.getElementById("chasis").value = registro.chasis;
-        document.getElementById("cedula").value = registro.cedula;
-        document.getElementById("nombreCompleto").value = registro.nombreCompleto;
-        document.getElementById("telefono").value = registro.telefono;
-        document.getElementById("correo").value = registro.correo;
-        document.getElementById("direccion").value = registro.direccion;
-        document.getElementById("tiempoTramite").value = registro.tiempoTramite;
-        document.getElementById("cuentaBancaria").value = registro.cuentaBancaria;
 
+        // Asignar valores a los campos del formulario con verificación de existencia
+        const setValue = (id, value) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = value || ""; // Si el valor es nulo o indefinido, asigna una cadena vacía
+            }
+        };
+        console.log("registro.etiqueta2 ",registro.etiqueta2)
+
+
+        setValue("idTramite", registro.id);
+        setValue("idTramiteEtapaDos", registro.id);
+        setValue("cliente", registro.cliente);
+        setValue("etiqueta1", registro.etiqueta1);
+        setValue("etiqueta2", registro.etiqueta2);
+
+        // Llamar la función para seleccionar el valor en "etapaDosetiqueta2"
+        setSelect2Value("etapaDosetiqueta1", registro.etiqueta1);
+
+       // Llamar la función para seleccionar el valor en "etapaDosetiqueta2"
+        setSelect2Value("etapaDosetiqueta2", registro.etiqueta2);
+        setValue("linkpago", registro.linkpago);
+        
+        // Llamar la función con los valores adecuados
+        setRadioValue("pagoinmediato", registro.pagoinmediato);
+
+
+        setValue("placa", registro.placa);
+        setValue("cilindraje", registro.cilindraje);
+        setValue("modelo", registro.modelo);
+        setValue("chasis", registro.chasis);
+        setValue("numeroDocumento", registro.numeroDocumento);
+        setValue("nombreCompleto", registro.nombreCompleto);
+        setValue("telefono", registro.telefono);
+        setValue("correo", registro.correo);
+        setValue("direccion", registro.direccion);
+        setValue("tipoDocumento", registro.tipoDocumento);
+        setValue("tiempoTramite", registro.tiempoTramite);
+        setValue("cuentaBancaria", registro.cuentaBancaria);
+
+        // Mostrar el modal de edición
         $("#openCreateRegistroClienteModal").modal("show");
     } catch (error) {
         console.error("Error al cargar el registro:", error);
+        alert("Hubo un problema al cargar el registro. Por favor, inténtalo de nuevo.");
     }
 }
 
 $(document).on("click", "#updateRegistro", function(){
     updateRegistro();
 });
+
 async function updateRegistro() {
+
     const form = document.getElementById("createRegistroForm");
+    
     const formData = new FormData(form);
 
     const payload = {};
+    
     formData.forEach((value, key) => {
         payload[key] = value;
     });
+    
     const token = localStorage.getItem("access"); // Obtener el token JWT del almacenamiento local
+    console.log("payload ",payload);
+
     try {
-        const response = await fetch(`${API_BASE_URL}teammovilidad/api/registro-movilidad/${payload.idTramite}/`, {
+        const response = await fetch(`${API_BASE_URL}/teammovilidad/api/registro-movilidad/${payload.idTramite}/`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${token}`, // Enviar el token JWT
@@ -247,7 +476,51 @@ async function updateRegistro() {
     }
 }
 
-
-document.addEventListener("DOMContentLoaded", () => {
-    cargarRegistrosAgrupados();
+/* ============================================================
+        ============== START ETAPA DOS ===================
+   ===========================================================*/
+$(document).on("click", "#updateRegistroEtapaDos", function(){
+    updateRegistroEtapaDos();
 });
+
+async function updateRegistroEtapaDos() {
+
+    const form = document.getElementById("createRegistroFormEtapaDos");
+    
+    const formData = new FormData(form);
+
+    const payload = {};
+    
+    formData.forEach((value, key) => {
+        payload[key] = value;
+    });
+    
+    const token = localStorage.getItem("access"); // Obtener el token JWT del almacenamiento local
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/teammovilidad/api/registro-movilidad/${payload.idTramite}/`, {
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`, // Enviar el token JWT
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert("Error al actualizar el registro: " + JSON.stringify(errorData));
+            return;
+        }
+
+        alert("Registro actualizado exitosamente.");
+        $("#openCreateRegistroClienteModal").modal("hide");
+        // Recargar la lista o actualizar la tabla
+    } catch (error) {
+        console.error("Error al actualizar el registro:", error);
+    }
+}
+
+/* ============================================================
+        ================= END ETAPA DOS ===================
+   ===========================================================*/

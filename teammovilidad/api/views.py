@@ -29,15 +29,17 @@ def registro_movilidad_list_create(request):
         })
 
     if request.method == 'POST':
-        # Incluir automáticamente el usuario en los datos enviados
         data = request.data.copy()  # Crear una copia de los datos enviados
         data['idusuario'] = user.id  # Agregar el ID del usuario autenticado
-
         serializer = CrearRegistroMovilidadSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Responder con errores de validación si hay algún problema
+        return Response({
+            'errors': serializer.errors,
+            'message': 'Validación fallida. Por favor revise los datos enviados.'
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -50,7 +52,6 @@ def registro_movilidad_grouped_by_user(request):
             to_attr='user_registros'
         )
     )
-
     # Construir la respuesta agrupada
     grouped_data = []
     for user in users:
@@ -81,7 +82,10 @@ def registro_movilidad_detail(request, pk):
         usuario_autenticado = request.user
         data = request.data
         data['idusuario'] = usuario_autenticado.id
-        data['cliente'] = "cliente"
+        
+        # Agregar 'cliente' a 'data' si existe en la entrada
+        if 'cliente' in data and data['cliente']:
+            data['cliente'] = data['cliente']
 
         serializer = CrearRegistroMovilidadSerializer(registro, data=data)
 
@@ -92,9 +96,16 @@ def registro_movilidad_detail(request, pk):
             # Guardar el registro actualizado
             registro_actualizado = serializer.save()
 
+            # Lista de campos a excluir del seguimiento
+            campos_excluidos = ['csrfmiddlewaretoken', 'idTramite', 'idusuario']
+
             # Comparar los valores antes y después de la actualización
             campos_modificados = []
             for campo, nuevo_valor in data.items():
+                # Saltar los campos excluidos
+                if campo in campos_excluidos:
+                    continue
+
                 # Obtener el valor anterior
                 valor_anterior = valores_antes.get(campo)
 
@@ -144,6 +155,7 @@ def registro_movilidad_detail(request, pk):
         )
         registro.delete()
         return Response({'message': 'Registro eliminado correctamente'}, status=status.HTTP_204_NO_CONTENT)
+        
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def registro_movilidad_subregistrosmovilidad(request, idregistroMovilidad):
@@ -166,11 +178,17 @@ def registro_movilidad_subregistrosmovilidad(request, idregistroMovilidad):
                 "precioLey": registro.precioLey,
                 "comision": registro.comision,
                 "placa": registro.placa,
+                "cilindraje":registro.cilindraje,
                 "chasis": registro.chasis,
                 "nombreCompleto": registro.nombreCompleto,
                 "correo": registro.correo,
                 "direccion": registro.direccion,
                 "fecha_creacion": registro.fecha_creacion,
+                "tipoDocumento":registro.tipoDocumento,
+                "modelo":registro.modelo,
+                "numeroDocumento":registro.numeroDocumento,
+                "telefono":registro.telefono,
+                "direccion":registro.direccion
             },
             "usuario": {
                 "id": usuario.id,
