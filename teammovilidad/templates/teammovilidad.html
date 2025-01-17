@@ -133,13 +133,13 @@
                             <a class="nav-link active" href="#" data-target="#etapaUno">🌟 Etapa 1 (Digitación)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="#etapaDos">🚀 Etapa 2 (Gestion del trámite)</a>
+                            <a class="nav-link disabled" href="#" data-target="#etapaDos" tabindex="-1" aria-disabled="true">🚀 Etapa 2 (Gestion del trámite)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="#etapaTres">📈 Etapa 3 (Confirmacion de precios)</a>
+                            <a class="nav-link disabled" href="#" data-target="#etapaTres" tabindex="-1" aria-disabled="true">📈 Etapa 3 (Confirmacion de precios)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-target="#etapaCuatro">📑 Etapa 4 (Subir PDFs)</a>
+                            <a class="nav-link disabled" href="#" data-target="#etapaCuatro" tabindex="-1" aria-disabled="true">📑 Etapa 4 (Subir PDFs)</a>
                         </li>
                     </ul>
 
@@ -157,8 +157,8 @@
                                                 <label for="cliente">👤 ¿A qué cliente pertenece?</label>
                                                 <select id="cliente" name="cliente" class="form-control" required>
                                                     <option value="" selected>Seleccione un cliente</option>
-                                                    <option value="Sergio Rueda"  >Sergio Rueda</option>
-                                                    <option value="Thiago Rueda"  >Thiago Rueda</option>
+                                                    <option value="Sergio Rueda">Sergio Rueda</option>
+                                                    <option value="Thiago Rueda">Thiago Rueda</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -181,28 +181,28 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="placa">🚗 Placa (Clave Única)</label>
-                                                <input type="text" value="Placa Uno" class="form-control text-uppercase" id="placa" name="placa" placeholder="Placa" required>
+                                                <input type="text" class="form-control text-uppercase" id="placa" name="placa" placeholder="Placa" required>
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="cilindraje">🔧 Cilindraje</label>
-                                                <input type="text" value="1111111" class="form-control" id="cilindraje" name="cilindraje" placeholder="Cilindraje">
+                                                <input type="text" class="form-control" id="cilindraje" name="cilindraje" placeholder="Cilindraje">
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="modelo">📅 Modelo</label>
-                                                <input type="text" value="2025" class="form-control" id="modelo" name="modelo" placeholder="Modelo">
+                                                <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo">
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="chasis">🔩 Chasis (Máximo 17 caracteres)</label>
-                                                <input type="text" value="Chasis - 1" class="form-control text-uppercase" id="chasis" name="chasis" maxlength="17" placeholder="Chasis" required>
+                                                <input type="text" class="form-control text-uppercase" id="chasis" name="chasis" maxlength="17" placeholder="Chasis" required>
                                             </div>
                                         </div>
 
@@ -224,26 +224,26 @@
                                             
                                             <div class="form-group">
                                                 <label for="numeroDocumento">👤 Numero de documento</label>
-                                                <input type="text" value="1098699531" class="form-control" id="numeroDocumento" name="numeroDocumento" placeholder="Numero de documento">
+                                                <input type="text" class="form-control" id="numeroDocumento" name="numeroDocumento" placeholder="Numero de documento">
                                             </div>
                                         </div>
                                         <div class="calss col-md-6">        
                                             <div class="form-group">
                                                 <label for="nombreCompleto">👤 Nombre completo</label>
-                                                <input type="text" value="Sergio Rueda" class="form-control" id="nombreCompleto" name="nombreCompleto" placeholder="Nombre completo">
+                                                <input type="text" class="form-control" id="nombreCompleto" name="nombreCompleto" placeholder="Nombre completo">
                                             </div>
                                         </div>
                                         <div class="calss col-md-3">
                                             <div class="form-group">
                                                 <label for="telefono">📞 Teléfono</label>
-                                                <input type="tel"  value="3143801560" class="form-control" id="telefono" name="telefono" placeholder="Teléfono">
+                                                <input type="tel"  class="form-control" id="telefono" name="telefono" placeholder="Teléfono">
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label for="correo">📧 Correo</label>
-                                                <input type="email" value="sr@hotmail.com" class="form-control" id="correo" name="correo" placeholder="Correo">
+                                                <input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -254,7 +254,7 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <input type="hidden" class="form-control" id="idTramite" name="idTramite" placeholder="idTramite">
+                                                <input type="text" class="form-control" id="idTramite" name="idTramite" placeholder="idTramite">
                                             </div>
                                         </div>
                                     
@@ -453,7 +453,6 @@
             
                                 <!-- Botones de acción -->
                                 <div class="text-right mt-3">
-                                    <button type="button" class="btn btn-success" id="createRegistro">✅ Guardar</button>
                                     <button type="button" class="btn btn-success" id="updateRegistro" onClick="updateRegistro()">✅ Modificar</button>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">❌ Cancelar</button>
                                 </div>
@@ -752,27 +751,10 @@
     });
   </script>
 
-  <!-- JavaScript -->
-<script>
-    // Evento para cambiar entre etapas
-    document.querySelectorAll('.nav-link').forEach(tab => {
-        tab.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            // Quitar la clase activa de todas las pestañas y contenidos
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove('active'));
-
-            // Activar la pestaña seleccionada y mostrar su contenido
-            this.classList.add('active');
-            const target = this.getAttribute('data-target');
-            document.querySelector(target).classList.add('active');
-        });
-    });
-</script>
-
+<!-- JavaScript -->
 <script>
 $(document).ready(function () {
+
     $('.select2').select2({
         theme: 'bootstrap',
         placeholder: "Seleccione una etiqueta",
@@ -792,20 +774,6 @@ $(document).ready(function () {
     
 });
 
-// Funciones para los botones
-function confirmarEmitido() {
-    alert("Registro confirmado como emitido.");
-}
-
-function guardarLink() {
-    const linkDepago = document.getElementById("linkDepago").value;
-
-    if (linkDepago) {
-        alert(`Link de pago guardado: ${linkDepago}`);
-    } else {
-        alert("Por favor, ingrese un link de pago antes de guardar.");
-    }
-}
 </script>
 
 

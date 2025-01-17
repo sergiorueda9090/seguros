@@ -1,4 +1,101 @@
 
+/* ========================================================== 
+   ============= START RESTABLECER FORMULARIO ===============
+   ========================================================== 
+*/
+function resetCreateRegistroForm() {
+    // Restablecer todos los inputs de texto, select y textarea
+    const form = document.getElementById("createRegistroForm");
+
+    // Restablecer valores predeterminados para los inputs de texto
+    form.reset();
+
+    // Configurar valores predeterminados específicos si es necesario
+    document.getElementById("cliente").value = ""; // Predeterminado vacío
+    document.getElementById("tipoDocumento").value = "CC"; // Predeterminado a Cédula de Ciudadanía
+    document.getElementById("etiqueta1").value = "";
+    document.getElementById("etiqueta2").value = "";
+    document.getElementById("placa").value = "";
+    document.getElementById("cilindraje").value = "";
+    document.getElementById("modelo").value = "";
+    document.getElementById("chasis").value = "";
+    document.getElementById("numeroDocumento").value = "";
+    document.getElementById("nombreCompleto").value = "";
+    document.getElementById("telefono").value = "";
+    document.getElementById("correo").value = "";
+    document.getElementById("direccion").value = "";
+    document.getElementById("idTramite").value = "";
+
+    // Restablecer estados de los botones si es necesario
+    document.getElementById("createRegistro").style.display = "inline-block";
+    document.getElementById("updateRegistro").style.display = "none";
+
+    // Si estás usando select2, reinicia también
+    //$('.select2').val('').trigger('change');
+}
+
+/* ========================================================== 
+   ============= END RESTABLECER FORMULARIO =================
+   ========================================================== 
+*/
+
+/* ========================================================== 
+   ============= START initializeTabNavigation =================
+   ========================================================== 
+*/
+function initializeTabNavigation(id, etiquetaUno) {
+    // Seleccionar todas las pestañas
+    const tabs = document.querySelectorAll('.nav-link');
+
+    // Habilitar/Deshabilitar las etapas según las condiciones
+    if (id) {
+        document.querySelector('[data-target="#etapaUno"]').classList.remove('disabled');
+        document.querySelector('[data-target="#etapaDos"]').classList.remove('disabled');
+
+        // Si etiquetaUno tiene valor, habilitar la etapaTres
+        if (etiquetaUno) {
+            document.querySelector('[data-target="#etapaTres"]').classList.remove('disabled');
+        } else {
+            document.querySelector('[data-target="#etapaTres"]').classList.add('disabled');
+        }
+    } else {
+        document.querySelector('[data-target="#etapaUno"]').classList.remove('disabled'); // Siempre habilitada
+        document.querySelector('[data-target="#etapaDos"]').classList.add('disabled');
+        document.querySelector('[data-target="#etapaTres"]').classList.add('disabled');
+    }
+
+    // Por defecto, activar la Etapa Uno
+    tabs.forEach(link => link.classList.remove('active')); // Remover cualquier clase activa
+    document.querySelector('[data-target="#etapaUno"]').classList.add('active'); // Activar Etapa Uno
+    document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove('active'));
+    document.querySelector('#etapaUno').classList.add('active'); // Mostrar contenido de Etapa Uno
+
+    // Añadir eventos de clic a las pestañas
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            // Verificar si la pestaña está deshabilitada
+            if (this.classList.contains('disabled')) {
+                return;
+            }
+
+            // Quitar la clase activa de todas las pestañas y sus contenidos
+            tabs.forEach(link => link.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(content => content.classList.remove('active'));
+
+            // Activar la pestaña seleccionada y mostrar su contenido
+            this.classList.add('active');
+            const target = this.getAttribute('data-target');
+            document.querySelector(target).classList.add('active');
+        });
+    });
+}
+
+/* ========================================================== 
+   ============= END initializeTabNavigation =================
+   ========================================================== 
+*/
 async function cargarRegistrosAgrupados() {
     const API_URL = `${API_BASE_URL}/teammovilidad/api/registro-movilidad-agrupado`; // URL del endpoint
     const token = localStorage.getItem("access"); // Obtener el token JWT del almacenamiento local
@@ -133,6 +230,8 @@ function formatearFecha(fechaISO) {
 }
 
 function openCreateRegistroModal(){
+    initializeTabNavigation();
+    resetCreateRegistroForm();
     $("#nuevoModalLabelModificar").hide();
     $("#updateRegistro").hide();
     $("#createRegistro").show();
@@ -211,6 +310,8 @@ async function enviarFormulario(payload) {
 
 //LISTAR REGISTROS
 document.addEventListener("DOMContentLoaded", () => {
+    initializeTabNavigation();
+    resetCreateRegistroForm();
     cargarRegistrosAgrupados();
 });
 
@@ -327,9 +428,6 @@ async function viewRegistro(idRegistro) {
     }
 }
 
-//SELECT2
-
-
 // Asignar valor al select con Select2
 const setSelect2Value = (id, value) => {
     const element = $(`#${id}`); // Usar jQuery para manipular Select2
@@ -357,7 +455,6 @@ function setRadioValue(name, value) {
         console.error(`No se encontró un radio button con el valor "${value}" para el nombre "${name}".`);
     }
 }
-
 
 //EDITAR REGISTRO
 async function loadRegistroForEdit(id) {
@@ -393,7 +490,9 @@ async function loadRegistroForEdit(id) {
             }
         };
         console.log("registro.etiqueta2 ",registro.etiqueta2)
-
+        
+        //Funcion para Habilitar la etapaDo
+        initializeTabNavigation(registro.id, registro.etiqueta1);
 
         setValue("idTramite", registro.id);
         setValue("idTramiteEtapaDos", registro.id);
@@ -411,7 +510,6 @@ async function loadRegistroForEdit(id) {
         // Llamar la función con los valores adecuados
         setRadioValue("pagoinmediato", registro.pagoinmediato);
 
-
         setValue("placa", registro.placa);
         setValue("cilindraje", registro.cilindraje);
         setValue("modelo", registro.modelo);
@@ -425,6 +523,7 @@ async function loadRegistroForEdit(id) {
         setValue("tiempoTramite", registro.tiempoTramite);
         setValue("cuentaBancaria", registro.cuentaBancaria);
 
+        
         // Mostrar el modal de edición
         $("#openCreateRegistroClienteModal").modal("show");
     } catch (error) {

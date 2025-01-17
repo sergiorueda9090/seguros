@@ -1,0 +1,190 @@
+{% extends 'adminlte/base.html' %}
+{% load static %}
+{% block title %}Roles{% endblock %}
+
+{% block head %}
+<!-- Estilos específicos del Dashboard -->
+<link rel="stylesheet" href="{% static 'adminlte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/daterangepicker/daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'adminlte/plugins/summernote/summernote-bs4.css' %}">
+<style>
+    img.table-avatar,
+        .table-avatar img {
+        border-radius: 50%;
+        display: inline;
+        width: 2.5rem;
+        }
+    
+        
+        .project-state {
+        text-align: center;
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>Clientes</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Lista de Clientes</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" onclick="openCreateModal()" title="Crear nuevo Clientes">
+                                Crear nuevo Clientes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table id="clientesTable" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Apellido</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Dirección</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Crear/Editar CLIENTE -->
+    <div id="roleModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info">
+                    <h5 class="modal-title text-white" id="modalTitle">Crear Nuevo Cliente</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="clienteForm">
+                        {% csrf_token %}
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="nombre">👤 Nombre</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="apellido">👤 Apellido</label>
+                                <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required>
+                            </div>
+                        </div>
+
+    
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="email">📧 Email</label>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Correo electrónico" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="telefono">📞 Teléfono</label>
+                                <input type="text" id="telefono" name="telefono" class="form-control" placeholder="Teléfono">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <div class="form-group">
+                                    <label for="direccion">🏠 Dirección</label>
+                                    <textarea id="direccion" name="direccion" class="form-control" rows="3" placeholder="Dirección"></textarea>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <hr>
+    
+                        <h5>📈 Lista de Precios</h5>
+                        <div id="preciosContainer">
+                            <div class="precio-item form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="descripcion">Descripción</label>
+                                    <input type="text" class="form-control descripcion" placeholder="Descripción del precio" required>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="monto">Monto</label>
+                                    <input type="number" class="form-control monto" placeholder="Monto del precio" required>
+                                </div>
+                                <div class="form-group col-md-2 d-flex align-items-end">
+                                    <button type="button" class="btn btn-danger btn-sm remove-precio" onclick="removePrecio(this)">🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="button" class="btn btn-success btn-sm" onclick="addPrecio()">➕ Agregar Precio</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCliente()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white">Confirmar Eliminación</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este cliente y todos sus precios asociados?</p>
+                    <input type="hidden" id="deleteClienteId"> <!-- Input oculto para almacenar el ID -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteCliente()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'adminlte/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+
+<script src="{% static 'js/clientes/clientes.js' %}"></script>
+
+<script>
+    $(function () {
+        $("#clientesTable").DataTable({
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json"
+            }
+        });
+    });
+</script>
+{% endblock %}

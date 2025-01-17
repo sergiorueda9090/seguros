@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'usermanagement',
     'labelcolors',
     'roles',
-    'teammovilidad'
+    'teammovilidad',
+    'clientes'
 ]
 
 MIDDLEWARE = [
